@@ -9,7 +9,6 @@ use App\Models\Comment;
 use App\Models\Lesson;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class AchievementTest extends TestCase
@@ -182,8 +181,6 @@ class AchievementTest extends TestCase
         $user = User::factory()->state(fn () => ['badge_id' => Badge::first()->id])
             ->create();
 
-
-
         $lessons = Lesson::factory()->count(50)->create();
 
         foreach ($lessons as $lesson) {
@@ -220,8 +217,6 @@ class AchievementTest extends TestCase
 
         $user = User::factory()->state(fn () => ['badge_id' => Badge::first()->id])
             ->create();
-
-
 
         $lessons = Lesson::factory()->count(50)->create();
 
@@ -284,7 +279,7 @@ class AchievementTest extends TestCase
                 'First Comment Written',
                 '3 Comments Written',
                 '5 Comments Written',
-                '10 Comments Written'
+                '10 Comments Written',
             ],
             'next_available_achievements' => ['20 Comments Written'],
             'current_badge' => 'Advanced',
@@ -324,7 +319,7 @@ class AchievementTest extends TestCase
                 '3 Comments Written',
                 '5 Comments Written',
                 '10 Comments Written',
-                '20 Comments Written'
+                '20 Comments Written',
             ],
             'next_available_achievements' => [],
             'current_badge' => 'Master',

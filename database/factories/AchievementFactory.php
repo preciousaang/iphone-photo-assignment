@@ -20,7 +20,7 @@ class AchievementFactory extends Factory
             //
             'type' => fake()->randomElement(['comment', 'lesson']),
             'name' => fake()->name(),
-            'number_to_achieve' => fake()->numberBetween(1, 20),
+            'number_to_unlock' => fake()->numberBetween(1, 20),
         ];
     }
 }

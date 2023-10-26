@@ -95,10 +95,10 @@ class User extends Authenticatable
     public function nextAvailableAchievements()
     {
 
-        return Achievement::selectRaw('min(number_to_achieve) as number_to_number_to_achieve, name, type')
+        return Achievement::selectRaw('min(number_to_unlock) as number_to_number_to_unlock, name, type')
             ->whereNotIn('id', $this->achievements()->pluck('achievements.id')->all())
             ->groupBy(['type'])
-            ->orderBy('number_to_achieve')
+            ->orderBy('number_to_unlock')
             ->limit(2)
             ->pluck('name')->all();
     }
@@ -143,7 +143,7 @@ class User extends Authenticatable
     public function hasEarnedAchievment($type, $count)
     {
         return Achievement::where('type', $type)
-            ->where('number_to_achieve', $count)
+            ->where('number_to_unlock', $count)
             ->first();
     }
 

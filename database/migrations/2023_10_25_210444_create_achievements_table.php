@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->enum('type', ['lesson', 'comment']);
             $table->string('name');
-            $table->integer('number_to_achieve');
+            $table->integer('number_to_unlock');
             $table->timestamps();
         });
     }

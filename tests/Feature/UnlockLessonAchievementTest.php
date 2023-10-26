@@ -8,7 +8,6 @@ use App\Models\Badge;
 use App\Models\Lesson;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
@@ -30,7 +29,7 @@ class UnlockLessonAchievementTest extends TestCase
 
         $this->seed();
         $user = User::factory()->state([
-            'badge_id' => Badge::first()->id
+            'badge_id' => Badge::first()->id,
         ])->create();
         $lesson = Lesson::factory()->create();
 

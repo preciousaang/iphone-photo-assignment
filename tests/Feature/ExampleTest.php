@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Badge;
 use App\Models\User;
-use Database\Factories\BadgeFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

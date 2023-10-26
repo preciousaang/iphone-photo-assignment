@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +16,7 @@ class BadgeSeeder extends Seeder
         DB::table('badges')->insert([
             [
                 'name' => 'Beginner',
-                'achievements_unlocked' => 0
+                'achievements_unlocked' => 0,
             ],
             [
                 'name' => 'Intermediate',
@@ -25,12 +24,12 @@ class BadgeSeeder extends Seeder
             ],
             [
                 'name' => 'Advanced',
-                'achievements_unlocked' => 8
+                'achievements_unlocked' => 8,
             ],
             [
                 'name' => 'Master',
-                'achievements_unlocked' => 10
-            ]
+                'achievements_unlocked' => 10,
+            ],
         ]);
     }
 }

@@ -19,7 +19,10 @@ class Badge extends Model
     public function remainingToUnlockNextBadge(): int
     {
         $nextBadge = $this->nextBadge();
-        if (!$nextBadge) return 0;
+        if (! $nextBadge) {
+            return 0;
+        }
+
         return $nextBadge->achievements_unlocked - $this->achievements_unlocked;
     }
 }

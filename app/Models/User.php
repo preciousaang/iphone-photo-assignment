@@ -135,7 +135,7 @@ class User extends Authenticatable
         $this->badge()->associate($nextBadge);
         $this->save();
 
-        BadgeUnlocked::dispatch($this->badge->name, $this);
+        BadgeUnlocked::dispatch($nextBadge->name, $this);
     }
 
     public function handleWrittenComment()

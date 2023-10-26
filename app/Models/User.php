@@ -86,7 +86,7 @@ class User extends Authenticatable
     public function unlockAchievment(string $name)
     {
         $achievement = Achievement::whereName($name)->first();
-        if (! $achievement) {
+        if (!$achievement) {
             throw new Exception('Achievement does not exist');
         }
         $this->achievements()->syncWithoutDetaching($achievement);

@@ -16,7 +16,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        User::factory()->count(10)->create();
+        $this->call([
+            BadgeSeeder::class,
+            UserSeeder::class,
+        ]);
 
         $lessons = Lesson::factory()
             ->count(20)

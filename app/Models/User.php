@@ -155,7 +155,7 @@ class User extends Authenticatable
     public function reviewBadgeEligibilty()
     {
         $nextBadge = $this->badge?->nextBadge();
-        if (!$nextBadge || $this->badge?->remainingAchievementsToUnlockNextBadge($this->achievements()->count()) !== 0) {
+        if (! $nextBadge || $this->badge?->remainingAchievementsToUnlockNextBadge($this->achievements()->count()) !== 0) {
             return;
         }
 

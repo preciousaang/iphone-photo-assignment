@@ -15,12 +15,17 @@ class AchievementTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->seed();
+    }
+
     /**
      * A basic feature test example.
      */
     public function test_first_lesson_watched(): void
     {
-        $this->seed();
 
         $lesson = Lesson::factory()->create();
 
@@ -44,9 +49,6 @@ class AchievementTest extends TestCase
 
     public function test_five_lesson_watched(): void
     {
-
-        $this->seed();
-
         $user = User::factory()->state(fn () => ['badge_id' => Badge::first()->id])
             ->create();
 
@@ -69,8 +71,6 @@ class AchievementTest extends TestCase
 
     public function test_ten_lessons_watched()
     {
-        $this->seed();
-
         $user = User::factory()->state(fn () => ['badge_id' => Badge::first()->id])
             ->create();
 
@@ -93,8 +93,6 @@ class AchievementTest extends TestCase
 
     public function test_twenty_five_lessons_watched()
     {
-        $this->seed();
-
         $user = User::factory()->state(fn () => ['badge_id' => Badge::first()->id])
             ->create();
 
@@ -117,8 +115,6 @@ class AchievementTest extends TestCase
 
     public function test_fifty_lessons_watched()
     {
-        $this->seed();
-
         $user = User::factory()->state(fn () => ['badge_id' => Badge::first()->id])
             ->create();
 
@@ -141,8 +137,6 @@ class AchievementTest extends TestCase
 
     public function test_fifty_lessons_watched_and_a_comment_written()
     {
-        $this->seed();
-
         $user = User::factory()->state(fn () => ['badge_id' => Badge::first()->id])
             ->create();
 
@@ -176,8 +170,6 @@ class AchievementTest extends TestCase
 
     public function test_fifty_lessons_watched_and_3_comments_written()
     {
-        $this->seed();
-
         $user = User::factory()->state(fn () => ['badge_id' => Badge::first()->id])
             ->create();
 
@@ -213,8 +205,6 @@ class AchievementTest extends TestCase
 
     public function test_fifty_lessons_watched_and_5_comments_written()
     {
-        $this->seed();
-
         $user = User::factory()->state(fn () => ['badge_id' => Badge::first()->id])
             ->create();
 
@@ -251,8 +241,6 @@ class AchievementTest extends TestCase
 
     public function test_fifty_lessons_watched_and_10_comments_written()
     {
-        $this->seed();
-
         $user = User::factory()->state(fn () => ['badge_id' => Badge::first()->id])
             ->create();
 
@@ -290,7 +278,6 @@ class AchievementTest extends TestCase
 
     public function test_all_achievments_work()
     {
-        $this->seed();
 
         $user = User::factory()->state(fn () => ['badge_id' => Badge::first()->id])
             ->create();

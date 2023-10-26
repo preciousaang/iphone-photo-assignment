@@ -27,7 +27,7 @@ class User extends Authenticatable
         'password',
     ];
 
-    protected $with = ['badge'];
+    protected $with = ['badge', 'achievements'];
 
     /**
      * The attributes that should be hidden for serialization.

@@ -9,7 +9,6 @@ use App\Events\BadgeUnlocked;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -90,10 +89,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Achievement::class);
     }
 
-
     /*
-        * Get the next available names
-        */
+    * Get the next available names
+    */
     public function nextAvailableAchievements()
     {
 
@@ -107,7 +105,9 @@ class User extends Authenticatable
 
     public function handleWatchedLesson(Lesson $lesson)
     {
-        if ($this->hasWatchedLesson($lesson)) return;
+        if ($this->hasWatchedLesson($lesson)) {
+            return;
+        }
 
         $this->lessons()->syncWithoutDetaching([$lesson->id => ['watched' => true]]);
 
@@ -136,7 +136,9 @@ class User extends Authenticatable
     /**
      * check if there is an earned lessen achievement
      *
-     * @return \App\Models\Achievement | null
+     *  @param  string  $type
+     *  @param  int  $count
+     *  @return \App\Models\Achievement | null
      */
     public function hasEarnedAchievment($type, $count)
     {
@@ -152,7 +154,6 @@ class User extends Authenticatable
      */
     public function reviewBadgeEligibilty()
     {
-        Log::alert($this->badge);
         $nextBadge = $this->badge?->nextBadge();
         if (!$nextBadge || $this->badge?->remainingAchievementsToUnlockNextBadge($this->achievements()->count()) !== 0) {
             return;
@@ -171,13 +172,13 @@ class User extends Authenticatable
 
     public function remainingAchievementsToUnlockNextBadge()
     {
-        return (int)$this->badge->remainingAchievementsToUnlockNextBadge($this->achievements()->count());
+        return (int) $this->badge->remainingAchievementsToUnlockNextBadge($this->achievements()->count());
     }
 
     public function handleWrittenComment()
     {
         if ($achievement = $this->hasEarnedAchievment('comment', $this->comments()->count())) {
-            $this->unlockAchievment($achievement);
+            $this->unlockAchievement($achievement);
             $this->reviewBadgeEligibilty();
             event(new AchievementUnlocked($achievement->name, $this));
         }

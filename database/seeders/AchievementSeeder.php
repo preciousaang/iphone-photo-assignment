@@ -45,22 +45,22 @@ class AchievementSeeder extends Seeder
                 'number_to_achieve' => 1,
             ],
             [
-                'name' => '3 Comments Watched',
+                'name' => '3 Comments Written',
                 'type' => 'comment',
                 'number_to_achieve' => 3,
             ],
             [
-                'name' => '5 Comments Watched',
+                'name' => '5 Comments Written',
                 'type' => 'comment',
                 'number_to_achieve' => 5,
             ],
             [
-                'name' => '10 Comments Watched',
+                'name' => '10 Comments Written',
                 'type' => 'comment',
                 'number_to_achieve' => 10,
             ],
             [
-                'name' => '20 Comments Watched',
+                'name' => '20 Comments Written',
                 'type' => 'comment',
                 'number_to_achieve' => 20,
             ],

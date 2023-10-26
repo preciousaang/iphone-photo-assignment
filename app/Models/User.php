@@ -89,12 +89,36 @@ class User extends Authenticatable
         return $this->belongsToMany(Achievement::class);
     }
 
-    public function handleWatchedLesson()
+
+    /*
+        * Get the next available names
+        */
+    public function nextAvailableAchievements()
     {
+
+        return Achievement::selectRaw('min(number_to_achieve) as number_to_number_to_achieve, name, type')
+            ->whereNotIn('id', $this->achievements()->pluck('achievements.id')->all())
+            ->groupBy(['type'])
+            ->orderBy('number_to_achieve')
+            ->limit(2)
+            ->pluck('name')->all();
+    }
+
+    public function handleWatchedLesson(Lesson $lesson)
+    {
+        if ($this->hasWatchedLesson($lesson)) return;
+
+        $this->lessons()->syncWithoutDetaching([$lesson->id => ['watched' => true]]);
+
         if ($achievement = $this->hasEarnedAchievment('lesson', $this->lessons()->count())) {
-            $this->unlockAchievment($achievement);
+            $this->unlockAchievement($achievement);
             event(new AchievementUnlocked($achievement->name, $this));
         }
+    }
+
+    public function hasWatchedLesson(Lesson $lesson)
+    {
+        return $this->achievements()->where('achievements.id', $lesson->id)->exists();
     }
 
     /**
@@ -102,7 +126,7 @@ class User extends Authenticatable
      *
      * @return void
      */
-    public function unlockAchievment(Achievement $achievement)
+    public function unlockAchievement(Achievement $achievement)
     {
         $this->achievements()->syncWithoutDetaching($achievement);
     }
@@ -126,8 +150,8 @@ class User extends Authenticatable
      */
     public function reviewBadgeEligibilty()
     {
-        $nextBadge = $this->badge?->nextBage;
-        if (!$nextBadge || $this->badge?->remainingToUnlockNextBadge() === 0) {
+        $nextBadge = $this->badge?->nextBadge();
+        if (!$nextBadge || $this->badge?->remainingAchievementsToUnlockNextBadge() === 0) {
             return;
         }
 
@@ -135,6 +159,16 @@ class User extends Authenticatable
         $this->save();
 
         BadgeUnlocked::dispatch($nextBadge->name, $this);
+    }
+
+    public function nextBadge()
+    {
+        return $this->badge?->nextBadge()?->name ?? '';
+    }
+
+    public function remainingAchievementsToUnlockNextBadge()
+    {
+        return (int)$this->badge->remainingAchievementsToUnlockNextBadge();
     }
 
     public function handleWrittenComment()

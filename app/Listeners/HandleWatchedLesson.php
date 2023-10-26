@@ -19,6 +19,6 @@ class HandleWatchedLesson
      */
     public function handle(LessonWatched $event): void
     {
-        $event->user->handleWatchedLesson();
+        $event->user->handleWatchedLesson($event->lesson);
     }
 }

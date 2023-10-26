@@ -21,5 +21,6 @@ class UnlockAchievement
     {
         //
         $event->user->unlockAchievment($event->achievement_name);
+        $event->user->reviewBadgeEligibilty();
     }
 }

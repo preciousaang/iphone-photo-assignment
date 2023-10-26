@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Events\AchievementUnlocked;
+use App\Events\BadgeUnlocked;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -26,6 +27,8 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+
+    protected $with = ['badge'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -103,6 +106,18 @@ class User extends Authenticatable
         return Achievement::where('type', 'lesson')
             ->where('number_to_achieve', $this->watched()->count())
             ->first();
+    }
+
+    public function reviewBadgeEligibilty()
+    {
+        $nextBadge = $this->badge?->nextBage;
+        if (! $nextBadge || $this->badge?->remainingToUnlockNextBadge() === 0) {
+            return;
+        }
+        $this->badge_id = $nextBadge->id;
+        $this->save();
+
+        BadgeUnlocked::dispatch($this->badge->name, $this);
     }
 
     public function handleWrittenComment(Comment $comment)

@@ -20,7 +20,7 @@ class Badge extends Model
     {
         $nextBadge = $this->nextBadge();
         if (! $nextBadge) {
-            return 0;
+            return -1;
         }
 
         return $nextBadge->achievements_unlocked - $this->achievements_unlocked;

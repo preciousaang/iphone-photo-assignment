@@ -261,8 +261,6 @@ class AchievementTest extends TestCase
         $user = User::factory()->state(fn () => ['badge_id' => Badge::first()->id])
             ->create();
 
-
-
         $lessons = Lesson::factory()->count(50)->create();
 
         foreach ($lessons as $lesson) {
@@ -292,6 +290,46 @@ class AchievementTest extends TestCase
             'current_badge' => 'Advanced',
             'next_badge' => 'Master',
             'remaining_to_unlock_next_badge' => 1,
+        ]);
+    }
+
+    public function test_all_achievments_work()
+    {
+        $this->seed();
+
+        $user = User::factory()->state(fn () => ['badge_id' => Badge::first()->id])
+            ->create();
+
+        $lessons = Lesson::factory()->count(50)->create();
+
+        foreach ($lessons as $lesson) {
+            $user->lessons()->syncWithoutDetaching([$lesson->id => ['watched' => true]]);
+            LessonWatched::dispatch($lesson, $user);
+        }
+
+        for ($i = 1; $i <= 20; $i++) {
+            $comment = Comment::factory()->for($user)->create();
+            CommentWritten::dispatch($comment);
+        }
+
+        $response = $this->get("/users/{$user->id}/achievements");
+        $response->assertJson([
+            'unlocked_achievements' => [
+                'First Lesson Watched',
+                '5 Lessons Watched',
+                '10 Lessons Watched',
+                '25 Lessons Watched',
+                '50 Lessons Watched',
+                'First Comment Written',
+                '3 Comments Written',
+                '5 Comments Written',
+                '10 Comments Written',
+                '20 Comments Written'
+            ],
+            'next_available_achievements' => [],
+            'current_badge' => 'Master',
+            'next_badge' => '',
+            'remaining_to_unlock_next_badge' => 0,
         ]);
     }
 }

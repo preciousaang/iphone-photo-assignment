@@ -18,17 +18,12 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             BadgeSeeder::class,
+            AchievementSeeder::class,
             UserSeeder::class,
         ]);
 
         $lessons = Lesson::factory()
             ->count(20)
             ->create();
-
-        Achievement::factory()->count(10)->state(function () {
-            return [
-                'next' => Achievement::inRandomOrder()->first()?->id,
-            ];
-        })->create();
     }
 }

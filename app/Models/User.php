@@ -101,7 +101,7 @@ class User extends Authenticatable
     public function hasEarnedLessonAchievment()
     {
         return Achievement::where('type', 'lesson')
-            ->where('number', $this->watched()->count())
+            ->where('number_to_achieve', $this->watched()->count())
             ->first();
     }
 

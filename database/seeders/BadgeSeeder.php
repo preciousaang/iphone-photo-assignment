@@ -17,19 +17,19 @@ class BadgeSeeder extends Seeder
         DB::table('badges')->insert([
             [
                 'name' => 'Beginner',
-                'achievements' => 0
+                'achievements_unlocked' => 0
             ],
             [
                 'name' => 'Intermediate',
-                'achievements' => 4,
+                'achievements_unlocked' => 4,
             ],
             [
                 'name' => 'Advanced',
-                'achievements' => 8
+                'achievements_unlocked' => 8
             ],
             [
                 'name' => 'Master',
-                'achievements' => 10
+                'achievements_unlocked' => 10
             ]
         ]);
     }

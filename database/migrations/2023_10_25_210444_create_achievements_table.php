@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('type');
             $table->string('name');
-            $table->integer('number');
-            $table->foreignId('next')->nullable()->constrained('achievements', 'id')->nullOnDelete();
+            $table->integer('number_to_achieve');
             $table->timestamps();
         });
     }

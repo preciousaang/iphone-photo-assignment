@@ -9,5 +9,17 @@ class Badge extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'achievments'];
+    protected $fillable = ['name', 'achievements_unlocked'];
+
+    public function nextBadge()
+    {
+        return Badge::where('achievements_unlocked', '>', $this->achievements_unlocked)->first();
+    }
+
+    public function remainingToUnlockNextBadge(): int
+    {
+        $nextBadge = $this->nextBadge();
+        if (!$nextBadge) return 0;
+        return $nextBadge->achievements_unlocked - $this->achievements_unlocked;
+    }
 }

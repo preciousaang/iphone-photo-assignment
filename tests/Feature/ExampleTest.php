@@ -29,7 +29,7 @@ class ExampleTest extends TestCase
             'next_available_achievements',
             'current_badge',
             'next_badge',
-            'remaing_to_unlock_next_badge',
+            'remaining_to_unlock_next_badge',
         ]);
     }
 }

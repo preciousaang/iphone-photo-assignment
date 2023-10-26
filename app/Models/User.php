@@ -9,6 +9,7 @@ use App\Events\BadgeUnlocked;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -112,6 +113,7 @@ class User extends Authenticatable
 
         if ($achievement = $this->hasEarnedAchievment('lesson', $this->lessons()->count())) {
             $this->unlockAchievement($achievement);
+            $this->reviewBadgeEligibilty();
             event(new AchievementUnlocked($achievement->name, $this));
         }
     }
@@ -150,8 +152,9 @@ class User extends Authenticatable
      */
     public function reviewBadgeEligibilty()
     {
+        Log::alert($this->badge);
         $nextBadge = $this->badge?->nextBadge();
-        if (!$nextBadge || $this->badge?->remainingAchievementsToUnlockNextBadge() === 0) {
+        if (!$nextBadge || $this->badge?->remainingAchievementsToUnlockNextBadge($this->achievements()->count()) !== 0) {
             return;
         }
 
@@ -168,13 +171,14 @@ class User extends Authenticatable
 
     public function remainingAchievementsToUnlockNextBadge()
     {
-        return (int)$this->badge->remainingAchievementsToUnlockNextBadge();
+        return (int)$this->badge->remainingAchievementsToUnlockNextBadge($this->achievements()->count());
     }
 
     public function handleWrittenComment()
     {
         if ($achievement = $this->hasEarnedAchievment('comment', $this->comments()->count())) {
             $this->unlockAchievment($achievement);
+            $this->reviewBadgeEligibilty();
             event(new AchievementUnlocked($achievement->name, $this));
         }
     }

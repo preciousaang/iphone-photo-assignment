@@ -16,13 +16,13 @@ class Badge extends Model
         return Badge::where('achievements_unlocked', '>', $this->achievements_unlocked)->first();
     }
 
-    public function remainingAchievementsToUnlockNextBadge(): int
+    public function remainingAchievementsToUnlockNextBadge($achievement_count): int
     {
         $nextBadge = $this->nextBadge();
         if (!$nextBadge) {
             return false;
         }
 
-        return $nextBadge->achievements_unlocked - $this->achievements_unlocked;
+        return $nextBadge->achievements_unlocked - $achievement_count;
     }
 }

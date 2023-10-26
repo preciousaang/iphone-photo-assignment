@@ -30,9 +30,7 @@ class EventServiceProvider extends ServiceProvider
         CommentWritten::class => [
             HandleWrittenComment::class,
         ],
-        AchievmentUnlocked::class => [
-            UnlockAchievement::class,
-        ],
+        AchievmentUnlocked::class => [],
     ];
 
     /**

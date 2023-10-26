@@ -58,6 +58,9 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class);
     }
 
+    /**
+     * User's current badge
+     */
     public function badge()
     {
         return $this->belongsTo(Badge::class);
@@ -79,6 +82,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Lesson::class)->wherePivot('watched', true);
     }
 
+    /**
+     * The unlocked achievments
+     */
     public function achievements()
     {
         return $this->belongsToMany(User::class);
@@ -87,40 +93,56 @@ class User extends Authenticatable
     public function handleWatchedLesson(Lesson $lesson)
     {
         $this->lessons()->syncWithoutDetaching([$lesson->id => ['watched' => true]]);
-        if ($achievment = $this->hasEarnedLessonAchievment()) {
-            event(new AchievementUnlocked($achievment->name, $this));
+        if ($achievement = $this->hasEarnedAchievment('lesson', $this->lessons()->count())) {
+            $this->unlockAchievment($achievement);
+            event(new AchievementUnlocked($achievement->name, $this));
         }
     }
 
-    public function unlockAchievment(string $name)
+
+    /**
+     * unlock an for the user
+     * @return void
+     */
+    public function unlockAchievment(Achievement $achievement)
     {
-        $achievement = Achievement::whereName($name)->first();
-        if (! $achievement) {
-            throw new Exception('Achievement does not exist');
-        }
         $this->achievements()->syncWithoutDetaching($achievement);
     }
 
-    public function hasEarnedLessonAchievment()
+
+    /**
+     * check if there is an earned lessen achievement
+     * @return \App\Models\Achievement | null
+     */
+    public function hasEarnedAchievment($type, $count)
     {
-        return Achievement::where('type', 'lesson')
-            ->where('number_to_achieve', $this->watched()->count())
+        return Achievement::where('type', $type)
+            ->where('number_to_achieve', $count)
             ->first();
     }
 
+    /**
+     * Review badge eligibility of user
+     * @return void
+     */
     public function reviewBadgeEligibilty()
     {
         $nextBadge = $this->badge?->nextBage;
-        if (! $nextBadge || $this->badge?->remainingToUnlockNextBadge() === 0) {
+        if (!$nextBadge || $this->badge?->remainingToUnlockNextBadge() === 0) {
             return;
         }
+
         $this->badge_id = $nextBadge->id;
         $this->save();
 
         BadgeUnlocked::dispatch($this->badge->name, $this);
     }
 
-    public function handleWrittenComment(Comment $comment)
+    public function handleWrittenComment()
     {
+        if ($achievement = $this->hasEarnedAchievment('comment', $this->comments()->count())) {
+            $this->unlockAchievment($achievement);
+            event(new AchievementUnlocked($achievement->name, $this));
+        }
     }
 }

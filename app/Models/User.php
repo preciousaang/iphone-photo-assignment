@@ -87,7 +87,7 @@ class User extends Authenticatable
      */
     public function achievements()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(Achievement::class);
     }
 
     public function handleWatchedLesson(Lesson $lesson)

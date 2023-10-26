@@ -1,0 +1,59 @@
+version: "3.6"
+services:
+  backend:
+    build: ./
+    ports:
+      - 8000:8000
+    volumes:
+      - ./:/app
+    depends_on:
+      - db
+      - redis
+      - phpmyadmin
+    networks:
+      - backend
+  redis:
+    image: redis:7.0.12-alpine
+    restart: always
+    volumes:
+      - iphone-photo-redis-db:/data
+    networks:
+      - backend
+  redis-insight:
+    image: redislabs/redisinsight
+    ports:
+      - 8001:8001
+    depends_on:
+      - redis
+    networks:
+      - backend
+
+  db:
+    image: mariadb:10.10.5-jammy
+    restart: always
+    environment:
+      MARIADB_USER: iphone_photo
+      MARIADB_PASSWORD: iphone_password
+      MARIADB_DATABASE: iphone_photo
+      MARIADB_ROOT_PASSWORD: albert
+    volumes:
+      - iphone-photo-maria-db:/var/lib/mysql
+    networks:
+      - backend
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - UPLOAD_LIMIT=128M
+    networks:
+      - backend
+
+volumes:
+  iphone-photo-maria-db:
+  iphone-photo-redis-db:
+
+networks:
+  backend:

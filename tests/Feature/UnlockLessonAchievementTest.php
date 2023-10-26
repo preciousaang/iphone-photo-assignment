@@ -23,7 +23,7 @@ class UnlockLessonAchievementTest extends TestCase
         Event::assertListening(LessonWatched::class, HandleWatchedLesson::class);
     }
 
-    public function test_achievement_is_added_when_event_is_fired(): void
+    public function test_achievement_is_added_when_lesson_watched_event_is_fired(): void
     {
         $user = User::factory()->create();
         $lesson = Lesson::factory()->create();

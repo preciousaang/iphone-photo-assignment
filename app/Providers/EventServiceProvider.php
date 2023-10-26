@@ -7,7 +7,6 @@ use App\Events\CommentWritten;
 use App\Events\LessonWatched;
 use App\Listeners\HandleWatchedLesson;
 use App\Listeners\HandleWrittenComment;
-use App\Listeners\UnlockAchievement;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;

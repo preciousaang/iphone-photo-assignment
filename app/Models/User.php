@@ -6,7 +6,6 @@ namespace App\Models;
 
 use App\Events\AchievementUnlocked;
 use App\Events\BadgeUnlocked;
-use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -90,18 +89,17 @@ class User extends Authenticatable
         return $this->belongsToMany(Achievement::class);
     }
 
-    public function handleWatchedLesson(Lesson $lesson)
+    public function handleWatchedLesson()
     {
-        $this->lessons()->syncWithoutDetaching([$lesson->id => ['watched' => true]]);
         if ($achievement = $this->hasEarnedAchievment('lesson', $this->lessons()->count())) {
             $this->unlockAchievment($achievement);
             event(new AchievementUnlocked($achievement->name, $this));
         }
     }
 
-
     /**
      * unlock an for the user
+     *
      * @return void
      */
     public function unlockAchievment(Achievement $achievement)
@@ -109,9 +107,9 @@ class User extends Authenticatable
         $this->achievements()->syncWithoutDetaching($achievement);
     }
 
-
     /**
      * check if there is an earned lessen achievement
+     *
      * @return \App\Models\Achievement | null
      */
     public function hasEarnedAchievment($type, $count)
@@ -123,12 +121,13 @@ class User extends Authenticatable
 
     /**
      * Review badge eligibility of user
+     *
      * @return void
      */
     public function reviewBadgeEligibilty()
     {
         $nextBadge = $this->badge?->nextBage;
-        if (!$nextBadge || $this->badge?->remainingToUnlockNextBadge() === 0) {
+        if (! $nextBadge || $this->badge?->remainingToUnlockNextBadge() === 0) {
             return;
         }
 

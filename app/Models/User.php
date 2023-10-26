@@ -132,7 +132,7 @@ class User extends Authenticatable
             return;
         }
 
-        $this->badge_id = $nextBadge->id;
+        $this->badge()->associate($nextBadge);
         $this->save();
 
         BadgeUnlocked::dispatch($this->badge->name, $this);

@@ -98,7 +98,7 @@ class User extends Authenticatable
     }
 
     /**
-     * unlock an for the user
+     * unlock an achievement for the user
      *
      * @return void
      */
@@ -127,7 +127,7 @@ class User extends Authenticatable
     public function reviewBadgeEligibilty()
     {
         $nextBadge = $this->badge?->nextBage;
-        if (! $nextBadge || $this->badge?->remainingToUnlockNextBadge() === 0) {
+        if (!$nextBadge || $this->badge?->remainingToUnlockNextBadge() === 0) {
             return;
         }
 
